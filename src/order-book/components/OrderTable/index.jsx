@@ -5,18 +5,32 @@ import PropTypes from 'prop-types'
 import QuoteRow from './QuoteRow'
 
 const OrderTable = styled(function OrderTable(props) {
-    const { className, orders } = props
+    const { className, buyOrders, sellOrders } = props
 
     return (
         <table className={className}>
             <tbody>
-                {orders.map(({ id, price, size, total }) => {
+                {buyOrders.map((order) => {
                     return (
                         <QuoteRow
-                            key={id}
-                            price={price}
-                            size={size}
-                            total={total}
+                            mode="buy"
+                            key={`buy-${order.id}`}
+                            id={order.id}
+                            price={order.price}
+                            size={order.size}
+                            total={order.total}
+                        />
+                    )
+                })}
+                {sellOrders.map((order) => {
+                    return (
+                        <QuoteRow
+                            mode="sell"
+                            key={`sell-${order.id}`}
+                            id={order.id}
+                            price={order.price}
+                            size={order.size}
+                            total={order.total}
                         />
                     )
                 })}
@@ -29,25 +43,21 @@ const OrderTable = styled(function OrderTable(props) {
     border-collapse: collapse;
 `
 
+const orderPropType = PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    price: PropTypes.number.isRequired,
+    size: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+})
+
 OrderTable.propTypes = {
-    orders: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-                .isRequired,
-            price: PropTypes.number.isRequired,
-            size: PropTypes.number.isRequired,
-            total: PropTypes.number.isRequired,
-        })
-    ),
+    buyOrders: PropTypes.arrayOf(orderPropType),
+    sellOrders: PropTypes.arrayOf(orderPropType),
 }
 
 OrderTable.defaultProps = {
-    orders: [
-        { id: 1, price: 56453.0, size: 85, total: 3411 },
-        { id: 2, price: 56453.0, size: 85, total: 3411 },
-        { id: 3, price: 56453.0, size: 85, total: 3411 },
-        { id: 4, price: 56453.0, size: 85, total: 3411 },
-    ],
+    buyOrders: [],
+    sellOrders: [],
 }
 
 export default OrderTable
