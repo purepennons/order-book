@@ -1,5 +1,7 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { normalize } from 'polished'
+
+import theme from './theme'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize()};
@@ -13,7 +15,9 @@ function App(props) {
     return (
         <>
             <GlobalStyle />
-            <div>Entry point</div>
+            <ThemeProvider theme={theme}>
+                <div>Entry point</div>
+            </ThemeProvider>
         </>
     )
 }
