@@ -1,23 +1,25 @@
 import { Component } from 'react'
-import styled from 'styled-components'
+import styled, { ThemeProvider, useTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 
 import FlashBackground from '../FlashBackground'
 
-const quoteRowTheme = {
+const getQuoteRowTheme = theme => ({
     buy: {
         colors: {
             text: '#00b15d',
             totalBarBackground: 'rgba(16, 186, 104, 0.12)',
+            flashBackground: theme.colors.greenHighlight
         },
     },
     sell: {
         colors: {
             text: '#FF5B5A',
             totalBarBackground: 'rgba(255, 90, 90, 0.12)',
+            flashBackground: theme.colors.redHighlight
         },
     },
-}
+})
 
 const QuoteRow = styled(
     class QuoteRow extends Component {
@@ -49,7 +51,7 @@ const QuoteRow = styled(
             )
         }
     }
-).attrs((props) => ({ modeTheme: quoteRowTheme[props.mode] }))`
+).attrs((props) => ({ modeTheme: props.theme.quoteRowTheme }))`
     font-size: ${(props) => props.theme.sizes.m};
     color: ${(props) => props.theme.colors.text};
     cursor: pointer;
@@ -76,33 +78,41 @@ const QuoteRow = styled(
     }
 `
 
-function QuoteRowWithFlash(props) {
+function QuoteRowWrapper(props) {
+    const { mode, shouldFlashWhenPropsChange } = props
+    const globalTheme = useTheme()
+    const theme = {
+        quoteRowTheme: getQuoteRowTheme(globalTheme)[mode] || {}
+    }
+
     return (
-        <FlashBackground enable>
-            {({ targetRef, flashAnimationClassName, triggerFlash }) => (
-                <QuoteRow
-                    targetRef={targetRef}
-                    flashAnimationClassName={flashAnimationClassName}
-                    triggerFlash={triggerFlash}
-                    {...props}
-                />
-            )}
-        </FlashBackground>
+        <ThemeProvider theme={theme}>
+            <FlashBackground enable flashColor={theme.quoteRowTheme.colors.flashBackground}>
+                {({ targetRef, flashAnimationClassName, triggerFlash }) => (
+                    <QuoteRow
+                        targetRef={targetRef}
+                        flashAnimationClassName={flashAnimationClassName}
+                        triggerFlash={triggerFlash}
+                        shouldFlashWhenPropsChange={shouldFlashWhenPropsChange}
+                        {...props}
+                    />
+                )}
+            </FlashBackground>
+        </ThemeProvider>
     )
 }
 
-QuoteRowWithFlash.propTypes = {
+QuoteRowWrapper.propTypes = {
     mode: PropTypes.oneOf(['sell', 'buy']).isRequired,
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     price: PropTypes.number.isRequired,
     size: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
-    flashColor: PropTypes.string.isRequired,
     shouldFlashWhenPropsChange: PropTypes.func,
 }
 
-QuoteRowWithFlash.defaultProps = {
+QuoteRowWrapper.defaultProps = {
     shouldFlashWhenPropsChange: () => false,
 }
 
-export default QuoteRowWithFlash
+export default QuoteRowWrapper
