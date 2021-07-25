@@ -4,6 +4,13 @@ import styled from 'styled-components'
 
 const HOVER_COMPONENT_CLASSNAME = 'no_hover'
 
+const Container = styled.div`
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+`
+
 const Tooltip = styled(function Tooltip(props) {
     const { parentRef, children, className } = props
     const classNames = className.split(' ')
@@ -12,19 +19,12 @@ const Tooltip = styled(function Tooltip(props) {
         parentRef?.current?.classList?.add(...classNames)
         return () => parentRef?.current?.classList?.remove(...classNames)
     }, [parentRef])
-    return <div className={HOVER_COMPONENT_CLASSNAME}>{children}</div>
+    return <Container className={HOVER_COMPONENT_CLASSNAME}>{children}</Container>
 })`
-  position: relative;
-  
-  & .${HOVER_COMPONENT_CLASSNAME} {
-    visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 100%;
-  }
-  
+   position: relative;
+
   &:hover .${HOVER_COMPONENT_CLASSNAME} {
-    visibility: visible;
+    display: unset;
   }
 `
 
