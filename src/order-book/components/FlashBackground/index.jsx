@@ -24,6 +24,13 @@ const FlashBackground = styled(
             }
         }
 
+        componentDidUpdate(prevProps) {
+            const { targetRef } = this.props
+            if (prevProps.targetRef !== targetRef) {
+                this.cleanFlash(prevProps.targetRef)
+            }
+        }
+
         componentWillUnmount() {
             if (this.timer) {
                 window.clearTimeout(this.timer)
@@ -32,19 +39,18 @@ const FlashBackground = styled(
 
         triggerFlash = () => {
             const { enable, targetRef, duration } = this.props
-            this.cleanFlash()
+            this.cleanFlash(targetRef)
 
             if (enable) {
                 targetRef?.current?.classList?.add(FLASH_CLASSNAME)
                 this.timer = window.setTimeout(() => {
-                    this.cleanFlash()
+                    this.cleanFlash(targetRef)
                     this.timer = null
                 }, duration)
             }
         }
 
-        cleanFlash = () => {
-            const { targetRef } = this.props
+        cleanFlash = targetRef => {
             targetRef?.current?.classList?.remove(FLASH_CLASSNAME)
         }
 
