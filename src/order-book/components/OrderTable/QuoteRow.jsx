@@ -1,57 +1,45 @@
-import { Component } from 'react'
 import styled, { ThemeProvider, useTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 
 import FlashBackground from '../FlashBackground'
 
-const getQuoteRowTheme = theme => ({
+const getQuoteRowTheme = (theme) => ({
     buy: {
         colors: {
             text: '#00b15d',
             totalBarBackground: 'rgba(16, 186, 104, 0.12)',
-            flashBackground: theme.colors.greenHighlight
+            flashBackground: theme.colors.greenHighlight,
         },
     },
     sell: {
         colors: {
             text: '#FF5B5A',
             totalBarBackground: 'rgba(255, 90, 90, 0.12)',
-            flashBackground: theme.colors.redHighlight
+            flashBackground: theme.colors.redHighlight,
         },
     },
 })
 
-const QuoteRow = styled(
-    class QuoteRow extends Component {
-        componentDidUpdate(prevProps) {
-            const { shouldFlashWhenPropsChange, triggerFlash } = this.props
-            if (shouldFlashWhenPropsChange(this.props, prevProps)) {
-                triggerFlash()
-            }
-        }
-
-        render() {
-            const {
-                className,
-                price,
-                size,
-                total,
-                targetRef,
-                flashAnimationClassName,
-            } = this.props
-            return (
-                <tr
-                    ref={targetRef}
-                    className={`${className} ${flashAnimationClassName}`}
-                >
-                    <td className="price">{price}</td>
-                    <td>{size}</td>
-                    <td>{total}</td>
-                </tr>
-            )
-        }
-    }
-).attrs((props) => ({ modeTheme: props.theme.quoteRowTheme }))`
+const QuoteRow = styled(function QuoteRow(props) {
+    const {
+        className,
+        price,
+        size,
+        total,
+        targetRef,
+        flashAnimationClassName,
+    } = props
+    return (
+        <tr
+            ref={targetRef}
+            className={`${className} ${flashAnimationClassName}`}
+        >
+            <td className="price">{price}</td>
+            <td>{size}</td>
+            <td>{total}</td>
+        </tr>
+    )
+}).attrs((props) => ({ modeTheme: props.theme.quoteRowTheme }))`
     font-size: ${(props) => props.theme.sizes.m};
     color: ${(props) => props.theme.colors.text};
     cursor: pointer;
@@ -79,21 +67,24 @@ const QuoteRow = styled(
 `
 
 function QuoteRowWrapper(props) {
-    const { mode, shouldFlashWhenPropsChange, shouldShowRowFlash } = props
+    const { mode, shouldShowRowFlash } = props
     const globalTheme = useTheme()
     const theme = {
-        quoteRowTheme: getQuoteRowTheme(globalTheme)[mode] || {}
+        quoteRowTheme: getQuoteRowTheme(globalTheme)[mode] || {},
     }
 
     return (
         <ThemeProvider theme={theme}>
-            <FlashBackground enable hasFlashOnMount={shouldShowRowFlash} flashColor={theme.quoteRowTheme.colors.flashBackground}>
+            <FlashBackground
+                enable
+                hasFlashOnMount={shouldShowRowFlash}
+                flashColor={theme.quoteRowTheme.colors.flashBackground}
+            >
                 {({ targetRef, flashAnimationClassName, triggerFlash }) => (
                     <QuoteRow
                         targetRef={targetRef}
                         flashAnimationClassName={flashAnimationClassName}
                         triggerFlash={triggerFlash}
-                        shouldFlashWhenPropsChange={shouldFlashWhenPropsChange}
                         {...props}
                     />
                 )}
@@ -109,11 +100,6 @@ QuoteRowWrapper.propTypes = {
     size: PropTypes.string.isRequired,
     total: PropTypes.string.isRequired,
     shouldShowRowFlash: PropTypes.bool,
-    shouldFlashWhenPropsChange: PropTypes.func,
-}
-
-QuoteRowWrapper.defaultProps = {
-    shouldFlashWhenPropsChange: () => false,
 }
 
 export default QuoteRowWrapper
