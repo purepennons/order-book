@@ -3,6 +3,7 @@ import styled, { ThemeProvider, useTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 
 import FlashBackground from '../FlashBackground'
+import InfoTooltip from './InfoTooltip'
 
 const getQuoteRowTheme = (theme) => ({
     buy: {
@@ -22,13 +23,28 @@ const getQuoteRowTheme = (theme) => ({
 })
 
 const QuoteRow = styled(function QuoteRow(props) {
-    const { className, price, size, total, targetRef } = props
+    const {
+        className,
+        price,
+        size,
+        total,
+        targetRef,
+        avgPrice,
+        totalValue,
+        currency,
+    } = props
 
     return (
         <tr ref={targetRef} className={className}>
             <td className="price">{price}</td>
             <td>{size}</td>
             <td>{total}</td>
+            <InfoTooltip
+                parentRef={targetRef}
+                avgPrice={avgPrice}
+                currency={currency}
+                totalValue={totalValue}
+            />
         </tr>
     )
 }).attrs((props) => ({ modeTheme: props.theme.quoteRowTheme }))`
@@ -50,7 +66,6 @@ const QuoteRow = styled(function QuoteRow(props) {
         width: calc(100% / 3);
         max-width: calc(100% / 3);
         text-align: right;
-        vertical-align: center;
     }
 
     & > .price {
@@ -78,7 +93,6 @@ function QuoteRowWrapper(props) {
                     <QuoteRow
                         targetRef={targetRef}
                         className={flashAnimationClassName}
-                        flashAnimationClassName={flashAnimationClassName}
                         triggerFlash={triggerFlash}
                         {...props}
                     />
@@ -94,6 +108,8 @@ QuoteRowWrapper.propTypes = {
     price: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
     total: PropTypes.string.isRequired,
+    avgPrice: PropTypes.string.isRequired,
+    totalValue: PropTypes.string.isRequired,
     shouldShowRowFlash: PropTypes.bool,
 }
 
