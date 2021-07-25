@@ -7,7 +7,7 @@ const HOVER_COMPONENT_CLASSNAME = 'no_hover'
 const Container = styled.div`
     display: none;
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 100%;
 `
 
