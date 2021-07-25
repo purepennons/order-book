@@ -79,7 +79,7 @@ const QuoteRow = styled(
 `
 
 function QuoteRowWrapper(props) {
-    const { mode, shouldFlashWhenPropsChange } = props
+    const { mode, shouldFlashWhenPropsChange, shouldShowRowFlash } = props
     const globalTheme = useTheme()
     const theme = {
         quoteRowTheme: getQuoteRowTheme(globalTheme)[mode] || {}
@@ -87,7 +87,7 @@ function QuoteRowWrapper(props) {
 
     return (
         <ThemeProvider theme={theme}>
-            <FlashBackground enable flashColor={theme.quoteRowTheme.colors.flashBackground}>
+            <FlashBackground enable hasFlashOnMount={shouldShowRowFlash} flashColor={theme.quoteRowTheme.colors.flashBackground}>
                 {({ targetRef, flashAnimationClassName, triggerFlash }) => (
                     <QuoteRow
                         targetRef={targetRef}
@@ -105,9 +105,10 @@ function QuoteRowWrapper(props) {
 QuoteRowWrapper.propTypes = {
     mode: PropTypes.oneOf(['sell', 'buy']).isRequired,
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    price: PropTypes.number.isRequired,
-    size: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
+    price: PropTypes.string.isRequired,
+    size: PropTypes.string.isRequired,
+    total: PropTypes.string.isRequired,
+    shouldShowRowFlash: PropTypes.bool,
     shouldFlashWhenPropsChange: PropTypes.func,
 }
 

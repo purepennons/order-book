@@ -19,6 +19,12 @@ const FlashBackground = styled(
         ref = React.createRef()
         timer = null
 
+        componentDidMount() {
+            if (this.props.hasFlashOnMount) {
+                this.triggerFlash()
+            }
+        }
+
         componentWillUnmount() {
             if (this.timer) {
                 window.clearTimeout(this.timer)
@@ -71,6 +77,7 @@ const FlashBackground = styled(
 FlashBackground.propTypes = {
     flashColor: PropTypes.string,
     enable: PropTypes.bool,
+    hasFlashOnMount: PropTypes.bool,
     duration: PropTypes.number,
 }
 

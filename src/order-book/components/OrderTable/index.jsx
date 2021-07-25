@@ -19,6 +19,7 @@ const OrderTable = styled(function OrderTable(props) {
                             price={order.price}
                             size={order.size}
                             total={order.total}
+                            shouldShowRowFlash={order.shouldShowRowFlash}
                         />
                     )
                 })}
@@ -31,6 +32,7 @@ const OrderTable = styled(function OrderTable(props) {
                             price={order.price}
                             size={order.size}
                             total={order.total}
+                            shouldShowRowFlash={order.shouldShowRowFlash}
                         />
                     )
                 })}
@@ -45,9 +47,10 @@ const OrderTable = styled(function OrderTable(props) {
 
 const orderPropType = PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    price: PropTypes.number.isRequired,
-    size: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
+    price: PropTypes.string.isRequired,
+    size: PropTypes.string.isRequired,
+    total: PropTypes.string.isRequired,
+    shouldShowRowFlash: PropTypes.bool,
 })
 
 OrderTable.propTypes = {
