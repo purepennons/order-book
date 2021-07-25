@@ -1,3 +1,4 @@
+import React, { useRef } from 'react'
 import styled, { ThemeProvider, useTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -21,19 +22,10 @@ const getQuoteRowTheme = (theme) => ({
 })
 
 const QuoteRow = styled(function QuoteRow(props) {
-    const {
-        className,
-        price,
-        size,
-        total,
-        targetRef,
-        flashAnimationClassName,
-    } = props
+    const { className, price, size, total, targetRef } = props
+
     return (
-        <tr
-            ref={targetRef}
-            className={`${className} ${flashAnimationClassName}`}
-        >
+        <tr ref={targetRef} className={className}>
             <td className="price">{price}</td>
             <td>{size}</td>
             <td>{total}</td>
@@ -69,6 +61,7 @@ const QuoteRow = styled(function QuoteRow(props) {
 function QuoteRowWrapper(props) {
     const { mode, shouldShowRowFlash } = props
     const globalTheme = useTheme()
+    const targetRef = useRef()
     const theme = {
         quoteRowTheme: getQuoteRowTheme(globalTheme)[mode] || {},
     }
@@ -77,12 +70,14 @@ function QuoteRowWrapper(props) {
         <ThemeProvider theme={theme}>
             <FlashBackground
                 enable
+                targetRef={targetRef}
                 hasFlashOnMount={shouldShowRowFlash}
                 flashColor={theme.quoteRowTheme.colors.flashBackground}
             >
-                {({ targetRef, flashAnimationClassName, triggerFlash }) => (
+                {({ flashAnimationClassName, triggerFlash }) => (
                     <QuoteRow
                         targetRef={targetRef}
+                        className={flashAnimationClassName}
                         flashAnimationClassName={flashAnimationClassName}
                         triggerFlash={triggerFlash}
                         {...props}

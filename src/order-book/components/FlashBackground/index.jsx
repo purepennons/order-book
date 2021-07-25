@@ -16,7 +16,6 @@ const flashAnimation = ({ flashColor }) => keyframes`
 
 const FlashBackground = styled(
     class FlashBackground extends React.Component {
-        ref = React.createRef()
         timer = null
 
         componentDidMount() {
@@ -32,11 +31,11 @@ const FlashBackground = styled(
         }
 
         triggerFlash = () => {
-            const { enable, duration } = this.props
+            const { enable, targetRef, duration } = this.props
             this.cleanFlash()
 
-            if (this.ref.current && enable) {
-                this.ref.current.classList.add(FLASH_CLASSNAME)
+            if (enable) {
+                targetRef?.current?.classList?.add(FLASH_CLASSNAME)
                 this.timer = window.setTimeout(() => {
                     this.cleanFlash()
                     this.timer = null
@@ -45,16 +44,14 @@ const FlashBackground = styled(
         }
 
         cleanFlash = () => {
-            if (this.ref.current) {
-                this.ref.current.classList.remove(FLASH_CLASSNAME)
-            }
+            const { targetRef } = this.props
+            targetRef?.current?.classList?.remove(FLASH_CLASSNAME)
         }
 
         getRenderProps = () => {
             const { className } = this.props
 
             return {
-                targetRef: this.ref,
                 flashAnimationClassName: className,
                 triggerFlash: this.triggerFlash,
             }
@@ -75,6 +72,7 @@ const FlashBackground = styled(
 `
 
 FlashBackground.propTypes = {
+    targetRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
     flashColor: PropTypes.string,
     enable: PropTypes.bool,
     hasFlashOnMount: PropTypes.bool,
