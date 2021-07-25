@@ -80,7 +80,7 @@ const FlashBackground = styled(
 `
 
 FlashBackground.propTypes = {
-    targetRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    targetRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }).isRequired,
     flashColor: PropTypes.string,
     enable: PropTypes.bool,
     hasFlashOnMount: PropTypes.bool,
