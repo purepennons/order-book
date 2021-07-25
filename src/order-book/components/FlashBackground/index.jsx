@@ -32,9 +32,7 @@ const FlashBackground = styled(
         }
 
         componentWillUnmount() {
-            if (this.timer) {
-                window.clearTimeout(this.timer)
-            }
+            this.cleanFlash(this.props.targetRef)
         }
 
         triggerFlash = () => {
@@ -45,13 +43,17 @@ const FlashBackground = styled(
                 targetRef?.current?.classList?.add(FLASH_CLASSNAME)
                 this.timer = window.setTimeout(() => {
                     this.cleanFlash(targetRef)
-                    this.timer = null
                 }, duration)
             }
         }
 
         cleanFlash = targetRef => {
             targetRef?.current?.classList?.remove(FLASH_CLASSNAME)
+
+            if (this.timer) {
+                window.clearTimeout(this.timer)
+                this.timer = null
+            }
         }
 
         getRenderProps = () => {
