@@ -2,6 +2,7 @@ import { createContext } from 'react'
 import * as mathjs from 'mathjs'
 
 import { NUMBER_OF_RECORDS } from './constants'
+import { convertArrayToObjectByField } from './utils'
 
 export const actionTypes = {
     UPDATE_QUOTE: 'UPDATE_QUOTE',
@@ -10,7 +11,9 @@ export const actionTypes = {
 export function getInitialOrderBookContext() {
     return {
         buyQuotes: [],
+        prevBuyQuotesMap: {},
         sellQuotes: [],
+        prevSellQuotesMap: {},
         raw: {},
     }
 }
@@ -22,12 +25,21 @@ export function reducer(state, action) {
 
     switch (type) {
         case actionTypes.UPDATE_QUOTE: {
+            const prevBuyQuotesMap = convertArrayToObjectByField(
+                state.buyQuotes
+            )
+            const prevSellQuotesMap = convertArrayToObjectByField(
+                state.sellQuotes
+            )
+
             return {
                 ...state,
-                buyQuotes: normalizeQuotes(payload?.buyQuote, state.buyQuotes),
+                prevBuyQuotesMap,
+                buyQuotes: normalizeQuotes(payload?.buyQuote, prevBuyQuotesMap),
+                prevSellQuotesMap,
                 sellQuotes: normalizeQuotes(
                     payload?.sellQuote,
-                    state.sellQuotes
+                    prevSellQuotesMap
                 ),
                 raw: payload,
             }
@@ -38,14 +50,18 @@ export function reducer(state, action) {
     }
 }
 
-export function normalizeQuotes(quotes = [], prevQuotes = []) {
+export function shouldShowRowFlash(quote, prevQuotesMap = {}) {
+    return (
+        Object.values(prevQuotesMap).length > 0 && !prevQuotesMap[quote?.price]
+    )
+}
+
+export function normalizeQuotes(quotes = [], prevQuotesMap = {}) {
     return quotes.slice(0, NUMBER_OF_RECORDS).map((quote) => ({
         ...quote,
         id: quote.price,
         total: quote.culmulativeTotal,
-        shouldShowRowFlash:
-            prevQuotes.length > 0 &&
-            !prevQuotes.find((prevQuote) => prevQuote.id === quote.price),
+        shouldShowRowFlash: shouldShowRowFlash(quote, prevQuotesMap),
     }))
 }
 
