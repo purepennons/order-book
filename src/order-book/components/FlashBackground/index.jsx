@@ -62,6 +62,7 @@ const FlashBackground = styled(
             return {
                 flashAnimationClassName: className,
                 triggerFlash: this.triggerFlash,
+                cleanFlash: this.cleanFlash,
             }
         }
 

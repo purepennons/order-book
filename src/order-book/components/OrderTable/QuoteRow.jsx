@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import FlashBackground from '../FlashBackground'
 import InfoTooltip from './InfoTooltip'
+import SizeColumn from "./SizeColumn";
 import { formatNumber } from '../../utils'
 
 const getQuoteRowTheme = (theme) => ({
@@ -33,13 +34,14 @@ const QuoteRow = styled(function QuoteRow(props) {
         currency,
         totalValue,
         avgPrice,
+        sizeColumnFlashColor,
     } = props
 
     return (
         <tr ref={targetRef} className={className}>
             <td className="price">{formatNumber(price)}</td>
-            <td>{formatNumber(size, { digits: 5 })}</td>
-            <td>{formatNumber(total, { digits: 5})}</td>
+            <SizeColumn size={size} flashColor={sizeColumnFlashColor} />
+            <td>{formatNumber(total, { digits: 5 })}</td>
             <InfoTooltip
                 parentRef={targetRef}
                 totalValue={totalValue}
@@ -90,11 +92,10 @@ function QuoteRowWrapper(props) {
                 hasFlashOnMount={shouldShowRowFlash}
                 flashColor={theme.quoteRowTheme.colors.flashBackground}
             >
-                {({ flashAnimationClassName, triggerFlash }) => (
+                {({ flashAnimationClassName }) => (
                     <QuoteRow
                         targetRef={targetRef}
                         className={flashAnimationClassName}
-                        triggerFlash={triggerFlash}
                         {...props}
                     />
                 )}
@@ -111,6 +112,7 @@ QuoteRowWrapper.propTypes = {
     total: PropTypes.string.isRequired,
     avgPrice: PropTypes.string.isRequired,
     totalValue: PropTypes.string.isRequired,
+    sizeColumnFlashColor: PropTypes.string.isRequired,
     shouldShowRowFlash: PropTypes.bool,
 }
 

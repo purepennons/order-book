@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 
 import { noop } from '../../utils'
@@ -13,6 +13,15 @@ const OrderTable = styled(function OrderTable(props) {
         calculateTotalValueById,
         calculateAveragePriceById,
     } = props
+    const theme = useTheme()
+
+    function getSizeColumnFlashColor(sizeChangeStatus) {
+        return {
+            '1': theme?.colors?.redHighlight,
+            '0': 'transparent',
+            '-1': theme?.colors?.greenHighlight,
+        }[String(sizeChangeStatus)]
+    }
 
     return (
         <table className={className}>
@@ -26,6 +35,7 @@ const OrderTable = styled(function OrderTable(props) {
                             price={order.price}
                             size={order.size}
                             total={order.total}
+                            sizeColumnFlashColor={getSizeColumnFlashColor(order.sizeChangeStatus)}
                             shouldShowRowFlash={order.shouldShowRowFlash}
                             avgPrice={String(calculateAveragePriceById(order.id, sellOrders))}
                             totalValue={String(calculateTotalValueById(order.id, sellOrders))}
@@ -41,6 +51,7 @@ const OrderTable = styled(function OrderTable(props) {
                             price={order.price}
                             size={order.size}
                             total={order.total}
+                            sizeColumnFlashColor={getSizeColumnFlashColor(order.sizeChangeStatus)}
                             shouldShowRowFlash={order.shouldShowRowFlash}
                             avgPrice={String(calculateAveragePriceById(order.id, buyOrders))}
                             totalValue={String(calculateTotalValueById(order.id, buyOrders))}
@@ -61,6 +72,7 @@ const orderPropType = PropTypes.shape({
     price: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
     total: PropTypes.string.isRequired,
+    sizeChangeStatus: PropTypes.oneOf([-1, 0, 1]).isRequired,
     shouldShowRowFlash: PropTypes.bool,
 })
 

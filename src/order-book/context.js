@@ -50,10 +50,29 @@ export function reducer(state, action) {
     }
 }
 
-export function shouldShowRowFlash(quote, prevQuotesMap = {}) {
+export function getShouldShowRowFlash(quote, prevQuotesMap = {}) {
     return (
         Object.values(prevQuotesMap).length > 0 && !prevQuotesMap[quote?.price]
     )
+}
+
+export function getSizeChangeStatus(quote, prevQuotesMap = {}) {
+    const statusMap = {
+        NORMAL: 0,
+        INC: 1,
+        DEC: -1,
+    }
+
+    const prevQuote = prevQuotesMap[quote?.price]
+    if (!prevQuote || quote?.size === prevQuote.size) {
+        return statusMap['NORMAL']
+    }
+
+    if (quote?.size > prevQuote.size) {
+        return statusMap['INC']
+    } else {
+        return statusMap['DEC']
+    }
 }
 
 export function normalizeQuotes(quotes = [], prevQuotesMap = {}) {
@@ -61,7 +80,8 @@ export function normalizeQuotes(quotes = [], prevQuotesMap = {}) {
         ...quote,
         id: quote.price,
         total: quote.culmulativeTotal,
-        shouldShowRowFlash: shouldShowRowFlash(quote, prevQuotesMap),
+        shouldShowRowFlash: getShouldShowRowFlash(quote, prevQuotesMap),
+        sizeChangeStatus: getSizeChangeStatus(quote, prevQuotesMap),
     }))
 }
 
