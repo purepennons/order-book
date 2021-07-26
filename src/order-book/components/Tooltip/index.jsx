@@ -13,12 +13,17 @@ const Container = styled.div`
 
 const Tooltip = styled(function Tooltip(props) {
     const { parentRef, children, className } = props
-    const classNames = className.split(' ')
 
     useEffect(() => {
-        parentRef?.current?.classList?.add(...classNames)
-        return () => parentRef?.current?.classList?.remove(...classNames)
-    }, [parentRef])
+        const el = parentRef?.current
+        const classNames = className.split(' ')
+
+        el?.classList?.add(...classNames)
+
+        return () => {
+            el?.classList?.remove(...classNames)
+        }
+    }, [parentRef, className])
     return <Container className={HOVER_COMPONENT_CLASSNAME}>{children}</Container>
 })`
    position: relative;
