@@ -10,9 +10,7 @@ export const actionTypes = {
 export function getInitialOrderBookContext() {
     return {
         buyQuotes: [],
-        prevBuyQuotes: [],
         sellQuotes: [],
-        prevSellQuotes: [],
         raw: {},
     }
 }
@@ -26,16 +24,11 @@ export function reducer(state, action) {
         case actionTypes.UPDATE_QUOTE: {
             return {
                 ...state,
-                buyQuotes: normalizeQuotes(
-                    payload?.buyQuote,
-                    state.prevBuyQuotes
-                ),
-                prevBuyQuotes: state.buyQuotes,
+                buyQuotes: normalizeQuotes(payload?.buyQuote, state.buyQuotes),
                 sellQuotes: normalizeQuotes(
                     payload?.sellQuote,
-                    state.prevSellQuotes
+                    state.sellQuotes
                 ),
-                prevSellQuotes: state.sellQuotes,
                 raw: payload,
             }
         }
