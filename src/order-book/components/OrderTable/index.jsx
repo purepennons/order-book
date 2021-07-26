@@ -2,10 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
+import { noop } from '../../utils'
 import QuoteRow from './QuoteRow'
 
 const OrderTable = styled(function OrderTable(props) {
-    const { className, buyOrders, sellOrders } = props
+    const {
+        className,
+        buyOrders,
+        sellOrders,
+        calculateTotalValueById,
+        calculateAveragePriceById,
+    } = props
 
     return (
         <table className={className}>
@@ -20,6 +27,8 @@ const OrderTable = styled(function OrderTable(props) {
                             size={order.size}
                             total={order.total}
                             shouldShowRowFlash={order.shouldShowRowFlash}
+                            avgPrice={String(calculateAveragePriceById(order.id, sellOrders))}
+                            totalValue={String(calculateTotalValueById(order.id, sellOrders))}
                         />
                     )
                 })}
@@ -33,6 +42,8 @@ const OrderTable = styled(function OrderTable(props) {
                             size={order.size}
                             total={order.total}
                             shouldShowRowFlash={order.shouldShowRowFlash}
+                            avgPrice={String(calculateAveragePriceById(order.id, buyOrders))}
+                            totalValue={String(calculateTotalValueById(order.id, buyOrders))}
                         />
                     )
                 })}
@@ -56,11 +67,15 @@ const orderPropType = PropTypes.shape({
 OrderTable.propTypes = {
     buyOrders: PropTypes.arrayOf(orderPropType),
     sellOrders: PropTypes.arrayOf(orderPropType),
+    calculateTotalValueById: PropTypes.func,
+    calculateAveragePriceById: PropTypes.func,
 }
 
 OrderTable.defaultProps = {
     buyOrders: [],
     sellOrders: [],
+    calculateTotalValueById: noop,
+    calculateAveragePriceById: noop,
 }
 
 export default OrderTable

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import FlashBackground from '../FlashBackground'
 import InfoTooltip from './InfoTooltip'
+import { formatNumber } from '../../utils'
 
 const getQuoteRowTheme = (theme) => ({
     buy: {
@@ -29,21 +30,21 @@ const QuoteRow = styled(function QuoteRow(props) {
         size,
         total,
         targetRef,
-        avgPrice,
-        totalValue,
         currency,
+        totalValue,
+        avgPrice,
     } = props
 
     return (
         <tr ref={targetRef} className={className}>
-            <td className="price">{price}</td>
-            <td>{size}</td>
-            <td>{total}</td>
+            <td className="price">{formatNumber(price)}</td>
+            <td>{formatNumber(size, { digits: 5 })}</td>
+            <td>{formatNumber(total, { digits: 5})}</td>
             <InfoTooltip
                 parentRef={targetRef}
+                totalValue={totalValue}
                 avgPrice={avgPrice}
                 currency={currency}
-                totalValue={totalValue}
             />
         </tr>
     )

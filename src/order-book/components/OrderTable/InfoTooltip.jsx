@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Tooltip from '../Tooltip'
+import { formatNumber } from '../../utils'
 
 const InfoTooltip = styled(function InfoTooltip(props) {
     const { className, parentRef, avgPrice, totalValue, currency } = props
@@ -9,10 +10,10 @@ const InfoTooltip = styled(function InfoTooltip(props) {
         <Tooltip parentRef={parentRef}>
             <div className={className}>
                 <p>
-                    Avg Price: {avgPrice} {currency}
+                    Avg Price: {formatNumber(avgPrice)} {currency}
                 </p>
                 <p>
-                    Total Value: {totalValue} {currency}
+                    Total Value: {formatNumber(totalValue)} {currency}
                 </p>
             </div>
         </Tooltip>
