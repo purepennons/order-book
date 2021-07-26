@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import * as mathjs from 'mathjs'
 
 import { NUMBER_OF_RECORDS } from './constants'
 
@@ -53,4 +54,42 @@ export function normalizeQuotes(quotes = [], prevQuotes = []) {
             prevQuotes.length > 0 &&
             !prevQuotes.find((prevQuote) => prevQuote.id === quote.price),
     }))
+}
+
+export function calculateTotalValueById(targetId, quotes = []) {
+    const targetIdx = quotes.findIndex(
+        (quote) => String(quote.id) === String(targetId)
+    )
+    if (targetIdx === -1) {
+        return 0
+    }
+
+    return quotes
+        .slice(0, targetIdx + 1)
+        .reduce(
+            (acc, quote) =>
+                mathjs.add(
+                    acc,
+                    mathjs.evaluate(
+                        `${String(quote.price)} * ${String(quote.size)}`
+                    )
+                ),
+            0
+        )
+}
+
+export function calculateAveragePriceById(targetId, quotes = []) {
+    const targetQuote = quotes.find(
+        (quote) => String(quote.id) === String(targetId)
+    )
+
+    if (!targetQuote) {
+        return 0
+    }
+
+    return mathjs.evaluate(
+        `${String(calculateTotalValueById(targetId, quotes))} / ${String(
+            targetQuote.total
+        )}`
+    )
 }
