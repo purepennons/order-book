@@ -85,10 +85,13 @@ export function normalizeQuotes(quotes = [], prevQuotesMap = {}) {
     }))
 }
 
+export function findQuoteIndex(id, quotes = []) {
+    return quotes.findIndex((quote) => String(quote.id) === String(id))
+}
+
 export function calculateTotalValueById(targetId, quotes = []) {
-    const targetIdx = quotes.findIndex(
-        (quote) => String(quote.id) === String(targetId)
-    )
+    const targetIdx = findQuoteIndex(targetId, quotes)
+
     if (targetIdx === -1) {
         return 0
     }
@@ -108,9 +111,8 @@ export function calculateTotalValueById(targetId, quotes = []) {
 }
 
 export function calculateAveragePriceById(targetId, quotes = []) {
-    const targetQuote = quotes.find(
-        (quote) => String(quote.id) === String(targetId)
-    )
+    const targetIdx = findQuoteIndex(targetId, quotes)
+    const targetQuote = quotes[targetIdx]
 
     if (!targetQuote) {
         return 0
@@ -121,4 +123,16 @@ export function calculateAveragePriceById(targetId, quotes = []) {
             targetQuote.total
         )}`
     )
+}
+
+export function calculateTotalBarPercentage(targetId, quotes = []) {
+    const targetIdx = findQuoteIndex(targetId, quotes)
+    const targetQuote = quotes[targetIdx]
+    const maxOrderSize = Math.max(...quotes.map((quote) => quote?.size ?? 0))
+
+    if (!targetQuote) {
+        return 0
+    }
+
+    return mathjs.evaluate(`${maxOrderSize} / ${targetQuote.total}`)
 }
