@@ -1,7 +1,7 @@
 import {
     calculateTotalValueById,
     calculateAveragePriceById,
-    calculateTotalBarPercentage,
+    calculateTotalBarPercentageById,
 } from '../context'
 
 describe('calculateTotalValueById', () => {
@@ -48,10 +48,10 @@ describe('calculateTotalBarPercentage', () => {
         ]
         const maxOrderSize = 4
 
-        expect(calculateTotalBarPercentage('id-4', data)).toEqual(
+        expect(calculateTotalBarPercentageById('id-4', data)).toEqual(
             maxOrderSize / 10
         )
-        expect(calculateTotalBarPercentage('id-3', data)).toEqual(
+        expect(calculateTotalBarPercentageById('id-3', data)).toEqual(
             maxOrderSize / 6
         )
     })

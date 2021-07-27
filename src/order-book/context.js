@@ -125,7 +125,7 @@ export function calculateAveragePriceById(targetId, quotes = []) {
     )
 }
 
-export function calculateTotalBarPercentage(targetId, quotes = []) {
+export function calculateTotalBarPercentageById(targetId, quotes = []) {
     const targetIdx = findQuoteIndex(targetId, quotes)
     const targetQuote = quotes[targetIdx]
     const maxOrderSize = Math.max(...quotes.map((quote) => quote?.size ?? 0))
