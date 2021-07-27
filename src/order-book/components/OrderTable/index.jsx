@@ -27,11 +27,11 @@ const OrderTable = styled(function OrderTable(props) {
     return (
         <table className={className}>
             <tbody>
-                {sellOrders.map((order) => {
+                {sellOrders.map((order, idx) => {
                     return (
                         <QuoteRow
                             mode="sell"
-                            key={`sell-${order.id}`}
+                            key={`sell-${idx}`}
                             id={order.id}
                             price={order.price}
                             size={order.size}
@@ -44,11 +44,11 @@ const OrderTable = styled(function OrderTable(props) {
                         />
                     )
                 })}
-                {buyOrders.map((order) => {
+                {buyOrders.map((order, idx) => {
                     return (
                         <QuoteRow
                             mode="buy"
-                            key={`buy-${order.id}`}
+                            key={`buy-${idx}`}
                             id={order.id}
                             price={order.price}
                             size={order.size}

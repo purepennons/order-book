@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import styled, { ThemeProvider, useTheme } from 'styled-components'
+import styled, { ThemeProvider, useTheme, withTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 
 import FlashBackground from '../FlashBackground'
@@ -25,40 +25,56 @@ const getQuoteRowTheme = (theme) => ({
     },
 })
 
-const QuoteRow = styled(function QuoteRow(props) {
-    const {
-        className,
-        price,
-        size,
-        total,
-        targetRef,
-        currency,
-        totalValue,
-        avgPrice,
-        barPercentage,
-        sizeColumnFlashColor,
-    } = props
+const QuoteRow = withTheme(styled(
+    class QuoteRow extends React.Component {
+        componentDidUpdate(prevProps) {
+            const { shouldShowRowFlash, triggerFlash } = this.props
 
-    const { quoteRowTheme } = useTheme()
+            if (
+                shouldShowRowFlash &&
+                shouldShowRowFlash !== prevProps.shouldShowRowFlash
+            ) {
+                triggerFlash()
+            }
+        }
 
-    return (
-        <tr ref={targetRef} className={className}>
-            <td className="price">{formatNumber(price)}</td>
-            <SizeColumn size={size} flashColor={sizeColumnFlashColor} />
-            <TotalColumn
-                total={total}
-                barPercentage={barPercentage}
-                barColor={quoteRowTheme.colors.totalBarBackground}
-            />
-            <InfoTooltip
-                parentRef={targetRef}
-                totalValue={totalValue}
-                avgPrice={avgPrice}
-                currency={currency}
-            />
-        </tr>
-    )
-}).attrs((props) => ({ modeTheme: props.theme.quoteRowTheme }))`
+        render() {
+            const {
+                className,
+                theme,
+                price,
+                size,
+                total,
+                targetRef,
+                currency,
+                totalValue,
+                avgPrice,
+                barPercentage,
+                sizeColumnFlashColor,
+            } = this.props
+
+            const { quoteRowTheme } = theme
+
+            return (
+                <tr ref={targetRef} className={className}>
+                    <td className="price">{formatNumber(price)}</td>
+                    <SizeColumn size={size} flashColor={sizeColumnFlashColor} />
+                    <TotalColumn
+                        total={total}
+                        barPercentage={barPercentage}
+                        barColor={quoteRowTheme.colors.totalBarBackground}
+                    />
+                    <InfoTooltip
+                        parentRef={targetRef}
+                        totalValue={totalValue}
+                        avgPrice={avgPrice}
+                        currency={currency}
+                    />
+                </tr>
+            )
+        }
+    }
+).attrs((props) => ({ modeTheme: props.theme.quoteRowTheme }))`
     font-size: ${(props) => props.theme.sizes.m};
     color: ${(props) => props.theme.colors.text};
     cursor: pointer;
@@ -82,7 +98,7 @@ const QuoteRow = styled(function QuoteRow(props) {
     & > .price {
         color: ${(props) => props.modeTheme.colors.text};
     }
-`
+`)
 
 function QuoteRowWrapper(props) {
     const { mode, shouldShowRowFlash } = props
@@ -97,13 +113,14 @@ function QuoteRowWrapper(props) {
             <FlashBackground
                 enable
                 targetRef={targetRef}
-                hasFlashOnMount={shouldShowRowFlash}
                 flashColor={theme.quoteRowTheme.colors.flashBackground}
             >
-                {({ flashAnimationClassName }) => (
+                {({ flashAnimationClassName, triggerFlash }) => (
                     <QuoteRow
                         targetRef={targetRef}
                         className={flashAnimationClassName}
+                        shouldShowRowFlash={shouldShowRowFlash}
+                        triggerFlash={triggerFlash}
                         {...props}
                     />
                 )}
