@@ -2,12 +2,12 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { noop } from '../../utils'
-import BTSEWebSocket from "../../lib/BTSWebsocket";
+import BTSEWebSocket from '../../lib/BTSWebsocket'
 
 class OrderBookSubscriber extends Component {
     ws = null
     state = {
-        data: {}
+        data: {},
     }
 
     componentDidMount() {
@@ -33,8 +33,9 @@ class OrderBookSubscriber extends Component {
         this.close()
     }
 
-    handleReceive = data => {
+    handleReceive = (data) => {
         this.setState(() => data)
+        this.props.onReceive(data)
     }
 
     create = (url, topic, cb = noop) => {
@@ -57,7 +58,7 @@ class OrderBookSubscriber extends Component {
 
     getRenderProps() {
         return {
-            ...this.state
+            ...this.state,
         }
     }
 
@@ -69,6 +70,11 @@ class OrderBookSubscriber extends Component {
 OrderBookSubscriber.propTypes = {
     url: PropTypes.string.isRequired,
     topic: PropTypes.string.isRequired,
+    onReceive: PropTypes.func,
+}
+
+OrderBookSubscriber.defaultProps = {
+    onReceive: noop,
 }
 
 export default OrderBookSubscriber

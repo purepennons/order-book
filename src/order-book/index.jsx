@@ -11,10 +11,16 @@ import {
     calculateTotalBarPercentageById,
 } from './context'
 import OrderTable from './components/OrderTable'
+import OrderBookSubscriber from './components/OrderBookSubscriber'
 import * as fakeData from './fake'
 
 const OrderBook = styled(function OrderBook(props) {
-    const { className, calculateTotalValueById, calculateAveragePriceById, calculateTotalBarPercentageById } = props
+    const {
+        className,
+        calculateTotalValueById,
+        calculateAveragePriceById,
+        calculateTotalBarPercentageById,
+    } = props
 
     const [fakeIdx, setFakeIdx] = React.useState(0)
     const [state, dispatch] = useContext(OrderBookContext)
@@ -35,7 +41,9 @@ const OrderBook = styled(function OrderBook(props) {
                 sellOrders={state.sellQuotes}
                 calculateTotalValueById={calculateTotalValueById}
                 calculateAveragePriceById={calculateAveragePriceById}
-                calculateTotalBarPercentageById={calculateTotalBarPercentageById}
+                calculateTotalBarPercentageById={
+                    calculateTotalBarPercentageById
+                }
             />
         </div>
     )
@@ -51,15 +59,33 @@ const OrderBook = styled(function OrderBook(props) {
 
 function OrderBookWrapper(props) {
     const statePair = useReducer(reducer, getInitialOrderBookContext())
+    const [, dispatch] = statePair
+
+    function handleDataChange(wsData) {
+        dispatch({
+            type: actionTypes.UPDATE_QUOTE,
+            ...wsData?.data ?? {},
+        })
+    }
 
     return (
         <OrderBookContext.Provider value={statePair}>
-            <OrderBook
-                calculateTotalValueById={calculateTotalValueById}
-                calculateAveragePriceById={calculateAveragePriceById}
-                calculateTotalBarPercentageById={calculateTotalBarPercentageById}
-                {...props}
-            />
+            <OrderBookSubscriber
+                url="wss://ws.btse.com/ws/spot"
+                topic="orderBook:ETH-USD_0"
+                onReceive={handleDataChange}
+            >
+                {() => (
+                    <OrderBook
+                        calculateTotalValueById={calculateTotalValueById}
+                        calculateAveragePriceById={calculateAveragePriceById}
+                        calculateTotalBarPercentageById={
+                            calculateTotalBarPercentageById
+                        }
+                        {...props}
+                    />
+                )}
+            </OrderBookSubscriber>
         </OrderBookContext.Provider>
     )
 }
