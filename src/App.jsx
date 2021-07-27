@@ -1,4 +1,4 @@
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { normalize } from 'polished'
 
 import theme from './theme'
@@ -13,15 +13,28 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-function App(props) {
+const App = styled(function App(props) {
+    const { className } = props
+
     return (
-        <>
+        <div className={className}>
             <GlobalStyle />
             <ThemeProvider theme={theme}>
-                <OrderBook />
+                <OrderBook className="order-table" />
             </ThemeProvider>
-        </>
+        </div>
     )
-}
+})`
+  margin: auto;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  
+  > .order-table {
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+`
 
 export default App

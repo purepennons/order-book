@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from 'react'
+import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -25,10 +25,9 @@ const OrderBook = styled(function OrderBook(props) {
     } = props
 
     return (
-        <div
-            className={className}
-        >
+        <div className={className}>
             <OrderTable
+                className="order-table"
                 buyOrders={buyOrders}
                 sellOrders={sellOrders}
                 calculateTotalValueById={calculateTotalValueById}
@@ -41,11 +40,10 @@ const OrderBook = styled(function OrderBook(props) {
     )
 })`
     width: 80%;
-    height: 600px;
-    background: tomato;
+    margin: auto;
 
-    ${OrderTable} {
-        margin: auto auto;
+    .order-table {
+        margin: auto;
     }
 `
 

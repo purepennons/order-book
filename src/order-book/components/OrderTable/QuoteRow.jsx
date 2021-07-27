@@ -80,11 +80,6 @@ const QuoteRow = withTheme(styled(
     cursor: pointer;
     height: 22px;
 
-    &,
-    & > td {
-        border: none;
-    }
-
     &:hover {
         background: #334573;
     }
@@ -93,6 +88,8 @@ const QuoteRow = withTheme(styled(
         width: calc(100% / 3);
         max-width: calc(100% / 3);
         text-align: right;
+        padding-right: 5px;
+        padding-left: 5px;
     }
 
     & > .price {
