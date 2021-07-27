@@ -14,33 +14,23 @@ import OrderTable from './components/OrderTable'
 import OrderBookSubscriber from './components/OrderBookSubscriber'
 import { DEFAULT_TOPIC, WEBSOCKET_URL } from './constants'
 
-import * as fakeData from './fake'
-
 const OrderBook = styled(function OrderBook(props) {
     const {
         className,
+        buyOrders,
+        sellOrders,
         calculateTotalValueById,
         calculateAveragePriceById,
         calculateTotalBarPercentageById,
     } = props
 
-    const [fakeIdx, setFakeIdx] = React.useState(0)
-    const [state, dispatch] = useContext(OrderBookContext)
-
     return (
         <div
             className={className}
-            onClick={() => {
-                setFakeIdx((prev) => (prev + 1) % 6)
-                dispatch({
-                    type: actionTypes.UPDATE_QUOTE,
-                    ...fakeData.orderData[fakeIdx].data,
-                })
-            }}
         >
             <OrderTable
-                buyOrders={state.buyQuotes}
-                sellOrders={state.sellQuotes}
+                buyOrders={buyOrders}
+                sellOrders={sellOrders}
                 calculateTotalValueById={calculateTotalValueById}
                 calculateAveragePriceById={calculateAveragePriceById}
                 calculateTotalBarPercentageById={
@@ -61,7 +51,7 @@ const OrderBook = styled(function OrderBook(props) {
 
 function OrderBookWrapper(props) {
     const statePair = useReducer(reducer, getInitialOrderBookContext())
-    const [, dispatch] = statePair
+    const [state, dispatch] = statePair
 
     function handleDataChange(wsData) {
         dispatch({
@@ -79,6 +69,8 @@ function OrderBookWrapper(props) {
             >
                 {() => (
                     <OrderBook
+                        buyOrders={state.buyQuotes}
+                        sellOrders={state.sellQuotes}
                         calculateTotalValueById={calculateTotalValueById}
                         calculateAveragePriceById={calculateAveragePriceById}
                         calculateTotalBarPercentageById={
