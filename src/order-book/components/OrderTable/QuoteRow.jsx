@@ -132,6 +132,7 @@ QuoteRowWrapper.propTypes = {
     price: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
     total: PropTypes.string.isRequired,
+    currency: PropTypes.string.isRequired,
     avgPrice: PropTypes.string.isRequired,
     totalValue: PropTypes.string.isRequired,
     barPercentage: PropTypes.number.isRequired,

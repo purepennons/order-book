@@ -21,9 +21,9 @@ const InfoTooltip = styled(function InfoTooltip(props) {
 })`
     position: relative;
     background: #57626e;
-    width: 150px;
+    width: 200px;
     height: 60px;
-    padding: 10px;
+    padding: 0 10px;
     margin-left: 10px;
     transform: translateY(-50%);
     display: flex;
@@ -33,7 +33,7 @@ const InfoTooltip = styled(function InfoTooltip(props) {
     border-radius: 10px;
 
     > p {
-        margin: 0;
+        margin: 0 0 5px 0;
     }
 
     &::before {

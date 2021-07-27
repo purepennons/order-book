@@ -14,6 +14,8 @@ export function getInitialOrderBookContext() {
         prevBuyQuotesMap: {},
         sellQuotes: [],
         prevSellQuotesMap: {},
+        symbol: 'N/A',
+        currency: 'N/A',
         raw: {},
     }
 }
@@ -41,6 +43,8 @@ export function reducer(state, action) {
                     payload?.sellQuote,
                     prevSellQuotesMap
                 ),
+                symbol: payload.symbol,
+                currency: payload.currency,
                 raw: payload,
             }
         }

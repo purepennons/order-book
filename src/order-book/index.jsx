@@ -17,6 +17,7 @@ import { DEFAULT_TOPIC, WEBSOCKET_URL } from './constants'
 const OrderBook = styled(function OrderBook(props) {
     const {
         className,
+        currency,
         buyOrders,
         sellOrders,
         calculateTotalValueById,
@@ -28,6 +29,7 @@ const OrderBook = styled(function OrderBook(props) {
         <div className={className}>
             <OrderTable
                 className="order-table"
+                currency={currency}
                 buyOrders={buyOrders}
                 sellOrders={sellOrders}
                 calculateTotalValueById={calculateTotalValueById}
@@ -67,6 +69,7 @@ function OrderBookWrapper(props) {
             >
                 {() => (
                     <OrderBook
+                        currency={state.currency}
                         buyOrders={state.buyQuotes}
                         sellOrders={state.sellQuotes}
                         calculateTotalValueById={calculateTotalValueById}

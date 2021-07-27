@@ -8,6 +8,7 @@ import QuoteRow from './QuoteRow'
 const OrderTable = styled(function OrderTable(props) {
     const {
         className,
+        currency,
         buyOrders,
         sellOrders,
         calculateTotalValueById,
@@ -36,6 +37,7 @@ const OrderTable = styled(function OrderTable(props) {
                             price={order.price}
                             size={order.size}
                             total={order.total}
+                            currency={currency}
                             sizeColumnFlashColor={getSizeColumnFlashColor(order.sizeChangeStatus)}
                             shouldShowRowFlash={order.shouldShowRowFlash}
                             avgPrice={String(calculateAveragePriceById(order.id, sellOrders))}
@@ -53,6 +55,7 @@ const OrderTable = styled(function OrderTable(props) {
                             price={order.price}
                             size={order.size}
                             total={order.total}
+                            currency={currency}
                             sizeColumnFlashColor={getSizeColumnFlashColor(order.sizeChangeStatus)}
                             shouldShowRowFlash={order.shouldShowRowFlash}
                             avgPrice={String(calculateAveragePriceById(order.id, buyOrders))}
@@ -80,6 +83,7 @@ const orderPropType = PropTypes.shape({
 })
 
 OrderTable.propTypes = {
+    currency: PropTypes.string.isRequired,
     buyOrders: PropTypes.arrayOf(orderPropType),
     sellOrders: PropTypes.arrayOf(orderPropType),
     calculateTotalValueById: PropTypes.func,
