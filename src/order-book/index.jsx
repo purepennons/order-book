@@ -12,6 +12,8 @@ import {
 } from './context'
 import OrderTable from './components/OrderTable'
 import OrderBookSubscriber from './components/OrderBookSubscriber'
+import { DEFAULT_TOPIC, WEBSOCKET_URL } from './constants'
+
 import * as fakeData from './fake'
 
 const OrderBook = styled(function OrderBook(props) {
@@ -71,8 +73,8 @@ function OrderBookWrapper(props) {
     return (
         <OrderBookContext.Provider value={statePair}>
             <OrderBookSubscriber
-                url="wss://ws.btse.com/ws/spot"
-                topic="orderBook:ETH-USD_0"
+                url={WEBSOCKET_URL}
+                topic={DEFAULT_TOPIC}
                 onReceive={handleDataChange}
             >
                 {() => (
