@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import FlashBackground from '../FlashBackground'
 import InfoTooltip from './InfoTooltip'
 import SizeColumn from "./SizeColumn";
+import TotalColumn from './TotalColumn'
 import { formatNumber } from '../../utils'
 
 const getQuoteRowTheme = (theme) => ({
@@ -37,11 +38,13 @@ const QuoteRow = styled(function QuoteRow(props) {
         sizeColumnFlashColor,
     } = props
 
+    const { quoteRowTheme } = useTheme()
+
     return (
         <tr ref={targetRef} className={className}>
             <td className="price">{formatNumber(price)}</td>
             <SizeColumn size={size} flashColor={sizeColumnFlashColor} />
-            <td>{formatNumber(total, { digits: 5 })}</td>
+            <TotalColumn total={total} barPercentage={0.85} barColor={quoteRowTheme.colors.totalBarBackground} />
             <InfoTooltip
                 parentRef={targetRef}
                 totalValue={totalValue}
