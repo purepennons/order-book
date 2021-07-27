@@ -8,12 +8,13 @@ import {
     actionTypes,
     calculateTotalValueById,
     calculateAveragePriceById,
+    calculateTotalBarPercentageById,
 } from './context'
 import OrderTable from './components/OrderTable'
 import * as fakeData from './fake'
 
 const OrderBook = styled(function OrderBook(props) {
-    const { className, calculateTotalValueById } = props
+    const { className, calculateTotalValueById, calculateAveragePriceById, calculateTotalBarPercentageById } = props
 
     const [fakeIdx, setFakeIdx] = React.useState(0)
     const [state, dispatch] = useContext(OrderBookContext)
@@ -34,13 +35,14 @@ const OrderBook = styled(function OrderBook(props) {
                 sellOrders={state.sellQuotes}
                 calculateTotalValueById={calculateTotalValueById}
                 calculateAveragePriceById={calculateAveragePriceById}
+                calculateTotalBarPercentageById={calculateTotalBarPercentageById}
             />
         </div>
     )
 })`
     width: 80%;
     height: 600px;
-    background: yellow;
+    background: tomato;
 
     ${OrderTable} {
         margin: auto auto;
@@ -55,6 +57,7 @@ function OrderBookWrapper(props) {
             <OrderBook
                 calculateTotalValueById={calculateTotalValueById}
                 calculateAveragePriceById={calculateAveragePriceById}
+                calculateTotalBarPercentageById={calculateTotalBarPercentageById}
                 {...props}
             />
         </OrderBookContext.Provider>

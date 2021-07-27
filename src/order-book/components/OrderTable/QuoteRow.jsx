@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import FlashBackground from '../FlashBackground'
 import InfoTooltip from './InfoTooltip'
-import SizeColumn from "./SizeColumn";
+import SizeColumn from './SizeColumn'
 import TotalColumn from './TotalColumn'
 import { formatNumber } from '../../utils'
 
@@ -35,6 +35,7 @@ const QuoteRow = styled(function QuoteRow(props) {
         currency,
         totalValue,
         avgPrice,
+        barPercentage,
         sizeColumnFlashColor,
     } = props
 
@@ -44,7 +45,11 @@ const QuoteRow = styled(function QuoteRow(props) {
         <tr ref={targetRef} className={className}>
             <td className="price">{formatNumber(price)}</td>
             <SizeColumn size={size} flashColor={sizeColumnFlashColor} />
-            <TotalColumn total={total} barPercentage={0.85} barColor={quoteRowTheme.colors.totalBarBackground} />
+            <TotalColumn
+                total={total}
+                barPercentage={barPercentage}
+                barColor={quoteRowTheme.colors.totalBarBackground}
+            />
             <InfoTooltip
                 parentRef={targetRef}
                 totalValue={totalValue}
@@ -115,6 +120,7 @@ QuoteRowWrapper.propTypes = {
     total: PropTypes.string.isRequired,
     avgPrice: PropTypes.string.isRequired,
     totalValue: PropTypes.string.isRequired,
+    barPercentage: PropTypes.number.isRequired,
     sizeColumnFlashColor: PropTypes.string.isRequired,
     shouldShowRowFlash: PropTypes.bool,
 }

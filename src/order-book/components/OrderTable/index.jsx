@@ -12,6 +12,7 @@ const OrderTable = styled(function OrderTable(props) {
         sellOrders,
         calculateTotalValueById,
         calculateAveragePriceById,
+        calculateTotalBarPercentageById,
     } = props
     const theme = useTheme()
 
@@ -39,6 +40,7 @@ const OrderTable = styled(function OrderTable(props) {
                             shouldShowRowFlash={order.shouldShowRowFlash}
                             avgPrice={String(calculateAveragePriceById(order.id, sellOrders))}
                             totalValue={String(calculateTotalValueById(order.id, sellOrders))}
+                            barPercentage={calculateTotalBarPercentageById(order.id, sellOrders)}
                         />
                     )
                 })}
@@ -55,6 +57,7 @@ const OrderTable = styled(function OrderTable(props) {
                             shouldShowRowFlash={order.shouldShowRowFlash}
                             avgPrice={String(calculateAveragePriceById(order.id, buyOrders))}
                             totalValue={String(calculateTotalValueById(order.id, buyOrders))}
+                            barPercentage={calculateTotalBarPercentageById(order.id, buyOrders)}
                         />
                     )
                 })}
@@ -81,6 +84,7 @@ OrderTable.propTypes = {
     sellOrders: PropTypes.arrayOf(orderPropType),
     calculateTotalValueById: PropTypes.func,
     calculateAveragePriceById: PropTypes.func,
+    calculateTotalBarPercentageById: PropTypes.func,
 }
 
 OrderTable.defaultProps = {
@@ -88,6 +92,7 @@ OrderTable.defaultProps = {
     sellOrders: [],
     calculateTotalValueById: noop,
     calculateAveragePriceById: noop,
+    calculateTotalBarPercentageById: noop,
 }
 
 export default OrderTable
