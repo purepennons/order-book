@@ -1,14 +1,22 @@
 import React from 'react'
-import styled, { useTheme } from 'styled-components'
 import PropTypes from 'prop-types'
+import styled, { useTheme } from 'styled-components'
+import { lighten } from 'polished'
 
 import { noop, formatNumber } from '../../utils'
+import Header from './Header'
 import QuoteRow from './QuoteRow'
 import SvgIcon from '../Icon'
+
+const Title = styled.h1`
+    color: ${(props) => props.theme.colors.text};
+    text-align: center;
+`
 
 const OrderTable = styled(function OrderTable(props) {
     const {
         className,
+        topic,
         currency,
         buyOrders,
         sellOrders,
@@ -38,6 +46,8 @@ const OrderTable = styled(function OrderTable(props) {
 
     return (
         <div className={className}>
+            <Title>Order Book - {topic}</Title>
+            <Header currency={currency} />
             <div>
                 {sellOrders.map((order, idx) => {
                     return (
@@ -122,6 +132,7 @@ const OrderTable = styled(function OrderTable(props) {
 })`
     background: ${(props) => props.theme.colors.bg};
     min-width: 300px;
+    border-radius: 10px;
 
     .last-price {
         font-size: 18px;
@@ -131,6 +142,8 @@ const OrderTable = styled(function OrderTable(props) {
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
+        border-top: 2px solid ${props => lighten(0.1, props.theme.colors.bg)};;
+        border-bottom: 2px solid ${props => lighten(0.1, props.theme.colors.bg)};
 
         > .icon {
             margin-left: 5px;
@@ -148,6 +161,7 @@ const orderPropType = PropTypes.shape({
 })
 
 OrderTable.propTypes = {
+    topic: PropTypes.string.isRequired,
     currency: PropTypes.string.isRequired,
     buyOrders: PropTypes.arrayOf(orderPropType),
     sellOrders: PropTypes.arrayOf(orderPropType),

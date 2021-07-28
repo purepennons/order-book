@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import * as mathjs from 'mathjs'
 
-import { NUMBER_OF_RECORDS } from './constants'
+import { NUMBER_OF_RECORDS, DEFAULT_TOPIC } from './constants'
 import { convertArrayToObjectByField } from './utils'
 
 export const actionTypes = {
@@ -10,6 +10,7 @@ export const actionTypes = {
 
 export function getInitialOrderBookContext() {
     return {
+        topic: DEFAULT_TOPIC,
         buyQuotes: [],
         prevBuyQuotesMap: {},
         sellQuotes: [],

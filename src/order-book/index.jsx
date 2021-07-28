@@ -12,11 +12,12 @@ import {
 } from './context'
 import OrderTable from './components/OrderTable'
 import OrderBookSubscriber from './components/OrderBookSubscriber'
-import { DEFAULT_TOPIC, WEBSOCKET_URL } from './constants'
+import { WEBSOCKET_URL } from './constants'
 
 const OrderBook = styled(function OrderBook(props) {
     const {
         className,
+        topic,
         currency,
         lastPrice,
         gain,
@@ -30,6 +31,7 @@ const OrderBook = styled(function OrderBook(props) {
     return (
         <div className={className}>
             <OrderTable
+                topic={topic}
                 currency={currency}
                 lastPrice={lastPrice}
                 gain={gain}
@@ -44,7 +46,7 @@ const OrderBook = styled(function OrderBook(props) {
         </div>
     )
 })`
-    width: 80%;
+    width: 65%;
     margin: auto;
 
     .order-table {
@@ -67,11 +69,12 @@ function OrderBookWrapper(props) {
         <OrderBookContext.Provider value={statePair}>
             <OrderBookSubscriber
                 url={WEBSOCKET_URL}
-                topic={DEFAULT_TOPIC}
+                topic={state.topic}
                 onReceive={handleDataChange}
             >
                 {() => (
                     <OrderBook
+                        topic={state.topic}
                         currency={state.currency}
                         gain={state.gain}
                         lastPrice={state.lastPrice}
