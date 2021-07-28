@@ -6,6 +6,7 @@ import { lighten } from 'polished'
 import { noop, formatNumber } from '../../utils'
 import Header from './Header'
 import QuoteRow from './QuoteRow'
+import Loading from './Loading'
 import SvgIcon from '../Icon'
 
 const Title = styled.h1`
@@ -48,85 +49,107 @@ const OrderTable = styled(function OrderTable(props) {
         <div className={className}>
             <Title>Order Book - {topic}</Title>
             <Header currency={currency} />
-            <div>
-                {sellOrders.map((order, idx) => {
-                    return (
-                        <QuoteRow
-                            mode="sell"
-                            key={`sell-${idx}`}
-                            id={order.id}
-                            price={order.price}
-                            size={order.size}
-                            total={order.total}
-                            currency={currency}
-                            sizeColumnFlashColor={getSizeColumnFlashColor(
-                                order.sizeChangeStatus
+            {sellOrders.length > 0 && buyOrders.length > 0 ? (
+                <>
+                    <div>
+                        {sellOrders.map((order, idx) => {
+                            return (
+                                <QuoteRow
+                                    mode="sell"
+                                    key={`sell-${idx}`}
+                                    id={order.id}
+                                    price={order.price}
+                                    size={order.size}
+                                    total={order.total}
+                                    currency={currency}
+                                    sizeColumnFlashColor={getSizeColumnFlashColor(
+                                        order.sizeChangeStatus
+                                    )}
+                                    shouldShowRowFlash={
+                                        order.shouldShowRowFlash
+                                    }
+                                    avgPrice={String(
+                                        calculateAveragePriceById(
+                                            order.id,
+                                            sellOrders
+                                        )
+                                    )}
+                                    totalValue={String(
+                                        calculateTotalValueById(
+                                            order.id,
+                                            sellOrders
+                                        )
+                                    )}
+                                    barPercentage={calculateTotalBarPercentageById(
+                                        order.id,
+                                        sellOrders
+                                    )}
+                                />
+                            )
+                        })}
+                    </div>
+                    {lastPrice && (
+                        <div className="last-price">
+                            <span style={{ color: getPriceColor(gain) }}>
+                                {formatNumber(lastPrice)}
+                            </span>
+                            {gain === 1 && (
+                                <SvgIcon
+                                    className="icon"
+                                    name="arrowUp"
+                                    style={{ color: theme.colors.green }}
+                                />
                             )}
-                            shouldShowRowFlash={order.shouldShowRowFlash}
-                            avgPrice={String(
-                                calculateAveragePriceById(order.id, sellOrders)
+                            {gain === -1 && (
+                                <SvgIcon
+                                    className="icon"
+                                    name="arrowDown"
+                                    style={{ color: theme.colors.red }}
+                                />
                             )}
-                            totalValue={String(
-                                calculateTotalValueById(order.id, sellOrders)
-                            )}
-                            barPercentage={calculateTotalBarPercentageById(
-                                order.id,
-                                sellOrders
-                            )}
-                        />
-                    )
-                })}
-            </div>
-            {lastPrice && (
-                <div className="last-price">
-                    <span style={{ color: getPriceColor(gain) }}>
-                        {formatNumber(lastPrice)}
-                    </span>
-                    {gain === 1 && (
-                        <SvgIcon
-                            className="icon"
-                            name="arrowUp"
-                            style={{ color: theme.colors.green }}
-                        />
+                        </div>
                     )}
-                    {gain === -1 && (
-                        <SvgIcon
-                            className="icon"
-                            name="arrowDown"
-                            style={{ color: theme.colors.red }}
-                        />
-                    )}
-                </div>
+                    <div>
+                        {buyOrders.map((order, idx) => {
+                            return (
+                                <QuoteRow
+                                    mode="buy"
+                                    key={`buy-${idx}`}
+                                    id={order.id}
+                                    price={order.price}
+                                    size={order.size}
+                                    total={order.total}
+                                    currency={currency}
+                                    sizeColumnFlashColor={getSizeColumnFlashColor(
+                                        order.sizeChangeStatus
+                                    )}
+                                    shouldShowRowFlash={
+                                        order.shouldShowRowFlash
+                                    }
+                                    avgPrice={String(
+                                        calculateAveragePriceById(
+                                            order.id,
+                                            buyOrders
+                                        )
+                                    )}
+                                    totalValue={String(
+                                        calculateTotalValueById(
+                                            order.id,
+                                            buyOrders
+                                        )
+                                    )}
+                                    barPercentage={calculateTotalBarPercentageById(
+                                        order.id,
+                                        buyOrders
+                                    )}
+                                />
+                            )
+                        })}
+                    </div>
+                </>
+            ) : (
+                <Loading />
             )}
-            <div>
-                {buyOrders.map((order, idx) => {
-                    return (
-                        <QuoteRow
-                            mode="buy"
-                            key={`buy-${idx}`}
-                            id={order.id}
-                            price={order.price}
-                            size={order.size}
-                            total={order.total}
-                            currency={currency}
-                            sizeColumnFlashColor={getSizeColumnFlashColor(
-                                order.sizeChangeStatus
-                            )}
-                            shouldShowRowFlash={order.shouldShowRowFlash}
-                            avgPrice={String(
-                                calculateAveragePriceById(order.id, buyOrders)
-                            )}
-                            totalValue={String(
-                                calculateTotalValueById(order.id, buyOrders)
-                            )}
-                            barPercentage={calculateTotalBarPercentageById(
-                                order.id,
-                                buyOrders
-                            )}
-                        />
-                    )
-                })}
-            </div>
         </div>
     )
 })`
@@ -143,8 +166,9 @@ const OrderTable = styled(function OrderTable(props) {
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
-        border-top: 2px solid ${props => lighten(0.1, props.theme.colors.bg)};;
-        border-bottom: 2px solid ${props => lighten(0.1, props.theme.colors.bg)};
+        border-top: 2px solid ${(props) => lighten(0.1, props.theme.colors.bg)};
+        border-bottom: 2px solid
+            ${(props) => lighten(0.1, props.theme.colors.bg)};
 
         > .icon {
             margin-left: 5px;

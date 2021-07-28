@@ -10,7 +10,7 @@ const theme = {
     sizes: {
         s: '12px',
         m: '13px',
-        l: '15px',
+        l: '30px',
     },
 }
 
