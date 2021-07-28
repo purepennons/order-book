@@ -99,9 +99,10 @@ const QuoteRow = withTheme(styled(
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
-      
+
         .col {
-            flex: 1 1 auto;
+            width: calc(100% / 3);
+            max-width: calc(100% / 3);
             text-align: right;
             padding: 10px 5px;
 
