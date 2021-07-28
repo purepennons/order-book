@@ -1,8 +1,13 @@
 import {
+    actionTypes,
+    reducer,
+    getInitialOrderBookContext,
     calculateTotalValueById,
     calculateAveragePriceById,
     calculateTotalBarPercentageById,
 } from '../context'
+
+import { fakeQuote } from '../fake/context.fake'
 
 describe('calculateTotalValueById', () => {
     it('should calculate by sumproduct(price * size)', () => {
@@ -54,5 +59,59 @@ describe('calculateTotalBarPercentage', () => {
         expect(calculateTotalBarPercentageById('id-3', data)).toEqual(
             maxOrderSize / 6
         )
+    })
+})
+
+describe('reducer', () => {
+    it('invalid action should return current state', () => {
+        expect(reducer(undefined, { type: 'INVALID_ACTION' })).toEqual(
+            undefined
+        )
+        expect(reducer({}, { type: 'INVALID_ACTION' })).toEqual({})
+    })
+
+    it('action: CHANGE_SOURCE', () => {
+        const topic1 = 'topic1'
+        const topic2 = 'topic2'
+        const r1 = reducer(
+            {},
+            { type: actionTypes.CHANGE_SOURCE, topic: topic1 }
+        )
+        expect(r1).toEqual({
+            ...getInitialOrderBookContext(),
+            topic: topic1,
+        })
+
+        const r2 = reducer(r1, {
+            type: actionTypes.CHANGE_SOURCE,
+            topic: topic2,
+        })
+        expect(r2).toEqual({
+            ...r1,
+            topic: topic2,
+        })
+    })
+
+    describe('action: UPDATE_QUOTE', () => {
+        it('should memorize the previous quote data', () => {
+            const r1 = reducer(getInitialOrderBookContext(), {
+                type: actionTypes.UPDATE_QUOTE,
+                ...fakeQuote,
+            })
+            expect(r1.prevBuyQuotesMap).toEqual({})
+            expect(r1.prevSellQuotesMap).toEqual({})
+
+            const r2 = reducer(r1, {
+                type: actionTypes.UPDATE_QUOTE,
+                ...fakeQuote,
+            })
+
+            expect(r2.prevBuyQuotesMap).toEqual({
+                [fakeQuote.buyQuote[0].price]: fakeQuote.buyQuote[0],
+            })
+            expect(r2.prevSellQuotesMap).toEqual({
+                [fakeQuote.sellQuote[0].price]: fakeQuote.sellQuote[0],
+            })
+        })
     })
 })
