@@ -2,6 +2,7 @@
   "name": "order-book",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://purepennons.github.io/order-book",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -22,7 +23,7 @@
     "test-dev": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -b master -d build"
   },
   "eslintConfig": {
     "extends": [
