@@ -22,9 +22,9 @@ class SizeColumn extends React.Component {
         const {size, targetRef, className } = this.props
 
         return (
-            <td ref={targetRef} className={className}>
+            <div ref={targetRef} className={className}>
                 {formatNumber(size, {digits: 5})}
-            </td>
+            </div>
         )
     }
 }

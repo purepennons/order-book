@@ -19,15 +19,15 @@ const OrderTable = styled(function OrderTable(props) {
 
     function getSizeColumnFlashColor(sizeChangeStatus) {
         return {
-            '1': theme?.colors?.redHighlight,
-            '0': 'transparent',
+            1: theme?.colors?.redHighlight,
+            0: 'transparent',
             '-1': theme?.colors?.greenHighlight,
         }[String(sizeChangeStatus)]
     }
 
     return (
-        <table className={className}>
-            <tbody>
+        <div className={className}>
+            <div>
                 {sellOrders.map((order, idx) => {
                     return (
                         <QuoteRow
@@ -38,14 +38,25 @@ const OrderTable = styled(function OrderTable(props) {
                             size={order.size}
                             total={order.total}
                             currency={currency}
-                            sizeColumnFlashColor={getSizeColumnFlashColor(order.sizeChangeStatus)}
+                            sizeColumnFlashColor={getSizeColumnFlashColor(
+                                order.sizeChangeStatus
+                            )}
                             shouldShowRowFlash={order.shouldShowRowFlash}
-                            avgPrice={String(calculateAveragePriceById(order.id, sellOrders))}
-                            totalValue={String(calculateTotalValueById(order.id, sellOrders))}
-                            barPercentage={calculateTotalBarPercentageById(order.id, sellOrders)}
+                            avgPrice={String(
+                                calculateAveragePriceById(order.id, sellOrders)
+                            )}
+                            totalValue={String(
+                                calculateTotalValueById(order.id, sellOrders)
+                            )}
+                            barPercentage={calculateTotalBarPercentageById(
+                                order.id,
+                                sellOrders
+                            )}
                         />
                     )
                 })}
+            </div>
+            <div>
                 {buyOrders.map((order, idx) => {
                     return (
                         <QuoteRow
@@ -56,16 +67,25 @@ const OrderTable = styled(function OrderTable(props) {
                             size={order.size}
                             total={order.total}
                             currency={currency}
-                            sizeColumnFlashColor={getSizeColumnFlashColor(order.sizeChangeStatus)}
+                            sizeColumnFlashColor={getSizeColumnFlashColor(
+                                order.sizeChangeStatus
+                            )}
                             shouldShowRowFlash={order.shouldShowRowFlash}
-                            avgPrice={String(calculateAveragePriceById(order.id, buyOrders))}
-                            totalValue={String(calculateTotalValueById(order.id, buyOrders))}
-                            barPercentage={calculateTotalBarPercentageById(order.id, buyOrders)}
+                            avgPrice={String(
+                                calculateAveragePriceById(order.id, buyOrders)
+                            )}
+                            totalValue={String(
+                                calculateTotalValueById(order.id, buyOrders)
+                            )}
+                            barPercentage={calculateTotalBarPercentageById(
+                                order.id,
+                                buyOrders
+                            )}
                         />
                     )
                 })}
-            </tbody>
-        </table>
+            </div>
+        </div>
     )
 })`
     background: ${(props) => props.theme.colors.bg};

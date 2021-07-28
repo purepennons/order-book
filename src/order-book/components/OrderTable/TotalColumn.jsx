@@ -14,7 +14,7 @@ function getBarWidth(barPercentage) {
 
 const TotalColumn = styled(function TotalColumn(props) {
     const { total, className } = props
-    return <td className={className}>{formatNumber(total, { digits: 5 })}</td>
+    return <div className={className}>{formatNumber(total, { digits: 5 })}</div>
 }).attrs((props) => ({
     barPercentageString: getBarWidth(props.barPercentage),
 }))`

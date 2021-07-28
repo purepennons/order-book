@@ -58,12 +58,12 @@ const QuoteRow = withTheme(styled(
             const { quoteRowTheme } = theme
 
             return (
-                <tr ref={rootRef} className={className}>
+                <div ref={rootRef} className={className}>
                     <div
                         ref={flashTargetRef}
                         className={`row-background ${flashAnimationClassName}`}
                     >
-                        <td className="price col">{formatNumber(price)}</td>
+                        <div className="price col">{formatNumber(price)}</div>
                         <SizeColumn
                             className="col"
                             size={size}
@@ -82,7 +82,7 @@ const QuoteRow = withTheme(styled(
                             currency={currency}
                         />
                     </div>
-                </tr>
+                </div>
             )
         }
     }
@@ -90,19 +90,20 @@ const QuoteRow = withTheme(styled(
     font-size: ${(props) => props.theme.sizes.m};
     color: ${(props) => props.theme.colors.text};
     cursor: pointer;
-    height: 22px;
 
     &:hover {
         background: #334573;
     }
 
     .row-background {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+      
         .col {
-            width: calc(100% / 3);
-            max-width: calc(100% / 3);
+            flex: 1 1 auto;
             text-align: right;
-            padding-right: 5px;
-            padding-left: 5px;
+            padding: 10px 5px;
 
             &.price {
                 color: ${(props) => props.modeTheme.colors.text};
