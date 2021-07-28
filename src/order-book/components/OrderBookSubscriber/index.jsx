@@ -2,7 +2,7 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { noop } from '../../utils'
-import BTSEWebSocket from '../../lib/BTSWebsocket'
+import BTSEWebSocket from '../../lib/BTSEWebsocket'
 
 class OrderBookSubscriber extends Component {
     ws = null
