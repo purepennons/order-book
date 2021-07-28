@@ -16,6 +16,8 @@ export function getInitialOrderBookContext() {
         prevSellQuotesMap: {},
         symbol: 'N/A',
         currency: 'N/A',
+        gain: 0,
+        lastPrice: '',
         raw: {},
     }
 }
@@ -45,6 +47,8 @@ export function reducer(state, action) {
                 ),
                 symbol: payload.symbol,
                 currency: payload.currency,
+                gain: payload.gain,
+                lastPrice: payload.lastPrice,
                 raw: payload,
             }
         }

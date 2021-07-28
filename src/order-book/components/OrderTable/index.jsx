@@ -2,8 +2,9 @@ import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { noop } from '../../utils'
+import { noop, formatNumber } from '../../utils'
 import QuoteRow from './QuoteRow'
+import SvgIcon from '../Icon'
 
 const OrderTable = styled(function OrderTable(props) {
     const {
@@ -11,6 +12,8 @@ const OrderTable = styled(function OrderTable(props) {
         currency,
         buyOrders,
         sellOrders,
+        lastPrice,
+        gain,
         calculateTotalValueById,
         calculateAveragePriceById,
         calculateTotalBarPercentageById,
@@ -19,10 +22,18 @@ const OrderTable = styled(function OrderTable(props) {
 
     function getSizeColumnFlashColor(sizeChangeStatus) {
         return {
-            1: theme?.colors?.redHighlight,
+            1: theme.colors.redHighlight,
             0: 'transparent',
-            '-1': theme?.colors?.greenHighlight,
+            '-1': theme.colors.greenHighlight,
         }[String(sizeChangeStatus)]
+    }
+
+    function getPriceColor(gain) {
+        return {
+            1: theme.colors.green,
+            0: theme.colors.text,
+            '-1': theme.colors.red,
+        }[String(gain)]
     }
 
     return (
@@ -56,6 +67,27 @@ const OrderTable = styled(function OrderTable(props) {
                     )
                 })}
             </div>
+            {lastPrice && (
+                <div className="last-price">
+                    <span style={{ color: getPriceColor(gain) }}>
+                        {formatNumber(lastPrice)}
+                    </span>
+                    {gain === 1 && (
+                        <SvgIcon
+                            className="icon"
+                            name="arrowUp"
+                            style={{ color: theme.colors.green }}
+                        />
+                    )}
+                    {gain === -1 && (
+                        <SvgIcon
+                            className="icon"
+                            name="arrowDown"
+                            style={{ color: theme.colors.red }}
+                        />
+                    )}
+                </div>
+            )}
             <div>
                 {buyOrders.map((order, idx) => {
                     return (
@@ -90,7 +122,20 @@ const OrderTable = styled(function OrderTable(props) {
 })`
     background: ${(props) => props.theme.colors.bg};
     min-width: 300px;
-    border-collapse: collapse;
+
+    .last-price {
+        font-size: 18px;
+        text-align: center;
+        padding: 10px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+
+        > .icon {
+            margin-left: 5px;
+        }
+    }
 `
 
 const orderPropType = PropTypes.shape({
@@ -106,6 +151,8 @@ OrderTable.propTypes = {
     currency: PropTypes.string.isRequired,
     buyOrders: PropTypes.arrayOf(orderPropType),
     sellOrders: PropTypes.arrayOf(orderPropType),
+    lastPrice: PropTypes.string,
+    gain: PropTypes.oneOf([-1, 0, 1]),
     calculateTotalValueById: PropTypes.func,
     calculateAveragePriceById: PropTypes.func,
     calculateTotalBarPercentageById: PropTypes.func,
@@ -114,6 +161,7 @@ OrderTable.propTypes = {
 OrderTable.defaultProps = {
     buyOrders: [],
     sellOrders: [],
+    gain: 0,
     calculateTotalValueById: noop,
     calculateAveragePriceById: noop,
     calculateTotalBarPercentageById: noop,

@@ -18,6 +18,8 @@ const OrderBook = styled(function OrderBook(props) {
     const {
         className,
         currency,
+        lastPrice,
+        gain,
         buyOrders,
         sellOrders,
         calculateTotalValueById,
@@ -28,8 +30,9 @@ const OrderBook = styled(function OrderBook(props) {
     return (
         <div className={className}>
             <OrderTable
-                className="order-table"
                 currency={currency}
+                lastPrice={lastPrice}
+                gain={gain}
                 buyOrders={buyOrders}
                 sellOrders={sellOrders}
                 calculateTotalValueById={calculateTotalValueById}
@@ -70,6 +73,8 @@ function OrderBookWrapper(props) {
                 {() => (
                     <OrderBook
                         currency={state.currency}
+                        gain={state.gain}
+                        lastPrice={state.lastPrice}
                         buyOrders={state.buyQuotes}
                         sellOrders={state.sellQuotes}
                         calculateTotalValueById={calculateTotalValueById}
