@@ -11,14 +11,14 @@ import { formatNumber } from '../../utils'
 const getQuoteRowTheme = (theme) => ({
     buy: {
         colors: {
-            text: '#00b15d',
+            text: theme.colors.green,
             totalBarBackground: 'rgba(16, 186, 104, 0.12)',
             flashBackground: theme.colors.greenHighlight,
         },
     },
     sell: {
         colors: {
-            text: '#FF5B5A',
+            text: theme.colors.red,
             totalBarBackground: 'rgba(255, 90, 90, 0.12)',
             flashBackground: theme.colors.redHighlight,
         },
