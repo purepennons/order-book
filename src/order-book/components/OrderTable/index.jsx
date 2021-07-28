@@ -133,6 +133,7 @@ const OrderTable = styled(function OrderTable(props) {
     background: ${(props) => props.theme.colors.bg};
     min-width: 300px;
     border-radius: 10px;
+    padding: 20px 30px;
 
     .last-price {
         font-size: 18px;
