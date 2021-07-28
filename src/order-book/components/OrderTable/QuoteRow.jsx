@@ -41,11 +41,13 @@ const QuoteRow = withTheme(styled(
         render() {
             const {
                 className,
+                flashAnimationClassName,
                 theme,
                 price,
                 size,
                 total,
-                targetRef,
+                rootRef,
+                flashTargetRef,
                 currency,
                 totalValue,
                 avgPrice,
@@ -56,20 +58,30 @@ const QuoteRow = withTheme(styled(
             const { quoteRowTheme } = theme
 
             return (
-                <tr ref={targetRef} className={className}>
-                    <td className="price">{formatNumber(price)}</td>
-                    <SizeColumn size={size} flashColor={sizeColumnFlashColor} />
-                    <TotalColumn
-                        total={total}
-                        barPercentage={barPercentage}
-                        barColor={quoteRowTheme.colors.totalBarBackground}
-                    />
-                    <InfoTooltip
-                        parentRef={targetRef}
-                        totalValue={totalValue}
-                        avgPrice={avgPrice}
-                        currency={currency}
-                    />
+                <tr ref={rootRef} className={className}>
+                    <div
+                        ref={flashTargetRef}
+                        className={`row-background ${flashAnimationClassName}`}
+                    >
+                        <td className="price col">{formatNumber(price)}</td>
+                        <SizeColumn
+                            className="col"
+                            size={size}
+                            flashColor={sizeColumnFlashColor}
+                        />
+                        <TotalColumn
+                            className="col"
+                            total={total}
+                            barPercentage={barPercentage}
+                            barColor={quoteRowTheme.colors.totalBarBackground}
+                        />
+                        <InfoTooltip
+                            parentRef={rootRef}
+                            totalValue={totalValue}
+                            avgPrice={avgPrice}
+                            currency={currency}
+                        />
+                    </div>
                 </tr>
             )
         }
@@ -84,23 +96,26 @@ const QuoteRow = withTheme(styled(
         background: #334573;
     }
 
-    & > td {
-        width: calc(100% / 3);
-        max-width: calc(100% / 3);
-        text-align: right;
-        padding-right: 5px;
-        padding-left: 5px;
-    }
+    .row-background {
+        .col {
+            width: calc(100% / 3);
+            max-width: calc(100% / 3);
+            text-align: right;
+            padding-right: 5px;
+            padding-left: 5px;
 
-    & > .price {
-        color: ${(props) => props.modeTheme.colors.text};
+            &.price {
+                color: ${(props) => props.modeTheme.colors.text};
+            }
+        }
     }
 `)
 
 function QuoteRowWrapper(props) {
     const { mode, shouldShowRowFlash } = props
     const globalTheme = useTheme()
-    const targetRef = useRef()
+    const rootRef = useRef()
+    const flashTargetRef = useRef()
     const theme = {
         quoteRowTheme: getQuoteRowTheme(globalTheme)[mode] || {},
     }
@@ -109,14 +124,15 @@ function QuoteRowWrapper(props) {
         <ThemeProvider theme={theme}>
             <FlashBackground
                 enable
-                targetRef={targetRef}
+                targetRef={flashTargetRef}
                 flashColor={theme.quoteRowTheme.colors.flashBackground}
             >
-                {({ flashAnimationClassName, triggerFlash }) => (
+                {({ triggerFlash, flashAnimationClassName }) => (
                     <QuoteRow
-                        targetRef={targetRef}
-                        className={flashAnimationClassName}
+                        rootRef={rootRef}
+                        flashTargetRef={flashTargetRef}
                         shouldShowRowFlash={shouldShowRowFlash}
+                        flashAnimationClassName={flashAnimationClassName}
                         triggerFlash={triggerFlash}
                         {...props}
                     />
