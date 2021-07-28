@@ -69,6 +69,7 @@ const OrderBook = styled(function OrderBook(props) {
         margin-bottom: 10px;
         > label {
             margin-right: 20px;
+            cursor: pointer;
 
             input {
                 margin-right: 5px;
