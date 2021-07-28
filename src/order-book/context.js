@@ -6,6 +6,7 @@ import { convertArrayToObjectByField } from './utils'
 
 export const actionTypes = {
     UPDATE_QUOTE: 'UPDATE_QUOTE',
+    CHANGE_SOURCE: 'CHANGE_SOURCE',
 }
 
 export function getInitialOrderBookContext() {
@@ -51,6 +52,13 @@ export function reducer(state, action) {
                 gain: payload.gain,
                 lastPrice: payload.lastPrice,
                 raw: payload,
+            }
+        }
+
+        case actionTypes.CHANGE_SOURCE: {
+            return {
+                ...getInitialOrderBookContext(),
+                topic: payload.topic,
             }
         }
 

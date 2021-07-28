@@ -12,7 +12,7 @@ import {
 } from './context'
 import OrderTable from './components/OrderTable'
 import OrderBookSubscriber from './components/OrderBookSubscriber'
-import { WEBSOCKET_URL } from './constants'
+import { WEBSOCKET_URL, SUPPORTED_TOPICS } from './constants'
 
 const OrderBook = styled(function OrderBook(props) {
     const {
@@ -26,10 +26,26 @@ const OrderBook = styled(function OrderBook(props) {
         calculateTotalValueById,
         calculateAveragePriceById,
         calculateTotalBarPercentageById,
+        onSourceChange,
     } = props
 
     return (
         <div className={className}>
+            <div className="control-source">
+                {Object.values(SUPPORTED_TOPICS).map((supportedTopic, idx) => (
+                    <label key={`topic-option-${idx}`}>
+                        <input
+                            type="radio"
+                            name="data-source"
+                            value={supportedTopic}
+                            checked={topic === supportedTopic}
+                            onChange={() => onSourceChange(supportedTopic)}
+                        />
+                        {supportedTopic}
+                    </label>
+                ))}
+            </div>
+
             <OrderTable
                 topic={topic}
                 currency={currency}
@@ -49,6 +65,17 @@ const OrderBook = styled(function OrderBook(props) {
     width: 65%;
     margin: auto;
 
+    .control-source {
+        margin-bottom: 10px;
+        > label {
+            margin-right: 20px;
+
+            input {
+                margin-right: 5px;
+            }
+        }
+    }
+
     .order-table {
         margin: auto;
     }
@@ -61,7 +88,14 @@ function OrderBookWrapper(props) {
     function handleDataChange(wsData) {
         dispatch({
             type: actionTypes.UPDATE_QUOTE,
-            ...wsData?.data ?? {},
+            ...(wsData?.data ?? {}),
+        })
+    }
+
+    function handleSourceChange(topic) {
+        dispatch({
+            type: actionTypes.CHANGE_SOURCE,
+            topic,
         })
     }
 
@@ -85,6 +119,7 @@ function OrderBookWrapper(props) {
                         calculateTotalBarPercentageById={
                             calculateTotalBarPercentageById
                         }
+                        onSourceChange={handleSourceChange}
                         {...props}
                     />
                 )}
