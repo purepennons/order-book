@@ -9,12 +9,14 @@ const InfoTooltip = styled(function InfoTooltip(props) {
     return (
         <Tooltip parentRef={parentRef}>
             <div className={className}>
-                <p>
-                    Avg Price: {formatNumber(avgPrice)} {currency}
-                </p>
-                <p>
-                    Total Value: {formatNumber(totalValue)} {currency}
-                </p>
+                <div>
+                    <p>
+                        Avg Price: {formatNumber(avgPrice)} {currency}
+                    </p>
+                    <p>
+                        Total Value: {formatNumber(totalValue)} {currency}
+                    </p>
+                </div>
             </div>
         </Tooltip>
     )
@@ -32,8 +34,9 @@ const InfoTooltip = styled(function InfoTooltip(props) {
     align-items: flex-start;
     border-radius: 10px;
 
-    > p {
-        margin: 0 0 5px 0;
+    p {
+        margin: 0;
+        padding: 2px 0;
     }
 
     &::before {
