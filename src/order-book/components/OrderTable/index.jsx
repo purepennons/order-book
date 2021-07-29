@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { useTheme } from 'styled-components'
 import { lighten } from 'polished'
 
-import { noop, formatNumber } from '../../utils'
+import { noop, formatNumber, toNumber } from '../../utils'
 import Header from './Header'
 import QuoteRow from './QuoteRow'
 import Loading from './Loading'
@@ -80,9 +80,11 @@ const OrderTable = styled(function OrderTable(props) {
                                             sellOrders
                                         )
                                     )}
-                                    barPercentage={calculateTotalBarPercentageById(
-                                        order.id,
-                                        sellOrders
+                                    barPercentage={toNumber(
+                                        calculateTotalBarPercentageById(
+                                            order.id,
+                                            sellOrders
+                                        )
                                     )}
                                 />
                             )
@@ -138,9 +140,11 @@ const OrderTable = styled(function OrderTable(props) {
                                             buyOrders
                                         )
                                     )}
-                                    barPercentage={calculateTotalBarPercentageById(
-                                        order.id,
-                                        buyOrders
+                                    barPercentage={toNumber(
+                                        calculateTotalBarPercentageById(
+                                            order.id,
+                                            buyOrders
+                                        )
                                     )}
                                 />
                             )

@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import * as mathjs from 'mathjs'
+import mathjs from './lib/math'
 
 import { NUMBER_OF_RECORDS, DEFAULT_TOPIC } from './constants'
 import { convertArrayToObjectByField } from './utils'

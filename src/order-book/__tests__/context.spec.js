@@ -6,6 +6,7 @@ import {
     calculateAveragePriceById,
     calculateTotalBarPercentageById,
 } from '../context'
+import { toNumber } from '../utils'
 
 import { fakeQuote } from '../fake/context.fake'
 
@@ -17,10 +18,10 @@ describe('calculateTotalValueById', () => {
             { id: 'id-3', price: 3, size: 3 },
             { id: 'id-4', price: 4, size: 4 },
         ]
-        expect(calculateTotalValueById('id-4', data)).toEqual(
+        expect(toNumber(calculateTotalValueById('id-4', data))).toEqual(
             1 * 1 + 2 * 2 + 3 * 3 + 4 * 4
         )
-        expect(calculateTotalValueById('id-3', data)).toEqual(
+        expect(toNumber(calculateTotalValueById('id-3', data))).toEqual(
             1 * 1 + 2 * 2 + 3 * 3
         )
     })
@@ -34,10 +35,10 @@ describe('calculateAveragePriceById', () => {
             { id: 'id-3', price: 3, size: 3, total: 6 },
             { id: 'id-4', price: 4, size: 4, total: 10 },
         ]
-        expect(calculateAveragePriceById('id-4', data)).toEqual(
+        expect(toNumber(calculateAveragePriceById('id-4', data))).toEqual(
             (1 * 1 + 2 * 2 + 3 * 3 + 4 * 4) / 10
         )
-        expect(calculateAveragePriceById('id-3', data)).toEqual(
+        expect(toNumber(calculateAveragePriceById('id-3', data))).toEqual(
             (1 * 1 + 2 * 2 + 3 * 3) / 6
         )
     })
@@ -53,10 +54,10 @@ describe('calculateTotalBarPercentage', () => {
         ]
         const maxOrderSize = 4
 
-        expect(calculateTotalBarPercentageById('id-4', data)).toEqual(
+        expect(toNumber(calculateTotalBarPercentageById('id-4', data))).toEqual(
             maxOrderSize / 10
         )
-        expect(calculateTotalBarPercentageById('id-3', data)).toEqual(
+        expect(toNumber(calculateTotalBarPercentageById('id-3', data))).toEqual(
             maxOrderSize / 6
         )
     })

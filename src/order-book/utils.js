@@ -1,7 +1,11 @@
 export function noop() {}
 
+export function toNumber(value) {
+    return Number(value.toString())
+}
+
 export function formatNumber(value, { digits } = { digits: 1 }) {
-    return Number(value).toLocaleString('en-US', {
+    return toNumber(value).toLocaleString('en-US', {
         maximumFractionDigits: digits,
     })
 }
