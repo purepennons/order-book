@@ -19,10 +19,10 @@ class SizeColumn extends React.Component {
     }
 
     render() {
-        const {size, targetRef, className } = this.props
+        const {size, targetRef, className, flashAnimationClassName } = this.props
 
         return (
-            <div ref={targetRef} className={className}>
+            <div ref={targetRef} className={`${className} ${flashAnimationClassName}`}>
                 {formatNumber(size, {digits: 5})}
             </div>
         )
@@ -38,7 +38,7 @@ function SizeColumnWrapper(props) {
             {({ flashAnimationClassName, triggerFlash, cleanFlash }) => (
                 <SizeColumn
                     targetRef={targetRef}
-                    className={flashAnimationClassName}
+                    flashAnimationClassName={flashAnimationClassName}
                     triggerFlash={triggerFlash}
                     cleanFlash={cleanFlash}
                     {...props}
